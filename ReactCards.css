@@ -1,0 +1,52 @@
+.card, .deck {
+    width: 50px;
+    height: 80px;
+    font-size: 2em;
+    text-align: center;
+    border: 2px solid gray;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.card.back {
+    background-color: gray;
+    border: 2px outset darkGray;
+}
+
+.card.back div {
+    visibility: hidden;
+}
+
+.red {
+    color: red;
+}
+
+#handArea, #handArea > div {
+    display: flex;
+    align-items: center;
+}
+
+#handArea > div.card {
+    display: block;
+}
+
+.deck {
+    background-color: gray;
+    border: 2px outset darkSlateGray;
+}
+
+#pointsArea {
+    font-size: 1.5em;
+    margin: 5px;
+}
+
+#examples {
+    display: flex;
+}
+
+#examples > div {
+    margin-right: 40px;
+}
