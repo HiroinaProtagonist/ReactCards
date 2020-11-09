@@ -30,3 +30,41 @@ class ShuffledCardSet {
         return this._contents.pop();
     }
 }
+
+// Stage 2 - Card
+class Card extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            faceUp: Boolean(true)
+        };
+    }
+
+    render() {
+        return (
+            <div className={this.state.faceUp ? "card" : "card back" } onClick={() => this.toggleFace()}>
+                <div className={this.props.suit == "♥" || this.props.suit == "♦" ? "red" : ""}>{this.props.rank}</div>
+                <div className={this.props.suit == "♥" || this.props.suit == "♦" ? "red" : ""}>{this.props.suit}</div>
+            </div>
+        )
+
+    }
+
+    toggleFace() {
+        console.log("toggled face");
+        this.setState(function (oldState, props) {
+            return {faceUp: !oldState.faceUp};
+        });
+    }
+}
+
+// Stage 2 - Generate props for Card
+let cardSet = new ShuffledCardSet();
+let obj = cardSet.removeCard();
+
+// Stage 2 - Render Card
+ReactDOM.render(
+    <Card suit={obj.suit} rank={obj.rank} />,
+    document.getElementById('handArea')
+);
+
