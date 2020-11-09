@@ -30,3 +30,70 @@ class ShuffledCardSet {
         return this._contents.pop();
     }
 }
+
+// Stage 4 - Hand
+class Hand extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            handCards: []
+        };
+    }
+
+    // key prop added to resolve an "Each child in a list should have a unique "key" prop." error
+    render() {
+        let cards = this.state.handCards.map((card) =>
+            <Card suit={card.suit} rank={card.rank} key={this.state.handCards.indexOf(card)}/>
+        );
+
+        return (
+            <div>
+                {cards}
+                <button onClick={() => this.addCard()}>Draw Card</button>
+            </div>
+        )
+    }
+
+    addCard() {
+        this.setState(function (oldState, props) {
+            return {handCards: oldState.handCards.concat(cardSet.removeCard())};
+        });
+    }
+}
+
+// Stage 2 - Card
+class Card extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            faceUp: Boolean(true)
+        };
+    }
+
+    render() {
+        return (
+            <div className={this.state.faceUp ? "card" : "card back" } onClick={() => this.toggleFace()}>
+                <div className={this.props.suit == "♥" || this.props.suit == "♦" ? "red" : ""}>{this.props.rank}</div>
+                <div className={this.props.suit == "♥" || this.props.suit == "♦" ? "red" : ""}>{this.props.suit}</div>
+            </div>
+        )
+    }
+
+    toggleFace() {
+        //console.log("toggled face");
+        this.setState(function (oldState, props) {
+            return {faceUp: !oldState.faceUp};
+        });
+    }
+}
+
+// Stage 4 - Generated objects no longer needed
+// Stage 3 - Generate props for Hand
+let cardSet = new ShuffledCardSet();
+
+// Stage 3, 4 - Render Hand
+ReactDOM.render(
+    <Hand />,
+    document.getElementById('handArea')
+);
+
