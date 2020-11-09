@@ -64,7 +64,7 @@ let obj = cardSet.removeCard();
 
 // Stage 2 - Render Card
 ReactDOM.render(
-    <Card suit={obj.suit} rank={obj.rank} red={obj.red} />,
+    <Card suit={obj.suit} rank={obj.rank} />,
     document.getElementById('handArea')
 );
 
