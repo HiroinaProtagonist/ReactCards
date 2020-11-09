@@ -30,34 +30,42 @@ class ShuffledCardSet {
         return this._contents.pop();
     }
 }
-
-// Stage 4 - Hand
-class Hand extends React.Component {
+// Stage 5 - Game
+class Game extends React.Component {
     constructor(props) {
         super(props);
+        // this.handleChange = this.handleChange.bind(this);
         this.state = {
-            handCards: []
+            handCards: [],
+            score: 0
         };
     }
 
-    // key prop added to resolve an "Each child in a list should have a unique "key" prop." error
-    render() {
-        let cards = this.state.handCards.map((card) =>
-            <Card suit={card.suit} rank={card.rank} key={this.state.handCards.indexOf(card)}/>
-        );
+    // handleChange(e) {
+    //     this.setState({handCards: e.target.value});
+    // }
 
+    render() {
         return (
             <div>
-                {cards}
-                <button onClick={() => this.addCard()}>Draw Card</button>
+                <div className="deckArea"><Deck handCards={this.state.handCards} /></div>
+                <div className="handArea"><Hand /></div>
+                <div className="pointsArea">Points: {this.state.score}</div>
             </div>
         )
     }
+}
 
-    addCard() {
-        this.setState(function (oldState, props) {
-            return {handCards: oldState.handCards.concat(cardSet.removeCard())};
-        });
+// Stage 5 - Simplify Hand
+// Stage 4 - Hand
+class Hand extends React.Component {
+    // key prop added to resolve an "Each child in a list should have a unique "key" prop." error
+    render() {
+        return (
+            <div>
+                {this.props.cards}
+            </div>
+        )
     }
 }
 
@@ -87,13 +95,26 @@ class Card extends React.Component {
     }
 }
 
+// Stage 1
+class Deck extends React.Component {
+    render() {
+        return <div className="deck" onClick={() => this.addCard()}></div>;
+    }
+
+    addCard() {
+        this.setState(function (oldState, props) {
+            return {handCards: this.props.handCards.concat(cardSet.removeCard())};
+        });
+    }
+}
+
 // Stage 4 - Generated objects no longer needed
 // Stage 3 - Generate props for Hand
 let cardSet = new ShuffledCardSet();
 
 // Stage 3, 4 - Render Hand
-ReactDOM.render(
-    <Hand />,
-    document.getElementById('handArea')
-);
+// Stage 1 - Render Deck
+//ReactDOM.render(<Deck />, document.getElementById('deckArea'));
+//ReactDOM.render(<Hand />,document.getElementById('handArea'));
+ReactDOM.render(<Game />,document.getElementById('game'));
 
