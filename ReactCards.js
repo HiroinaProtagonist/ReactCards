@@ -31,6 +31,29 @@ class ShuffledCardSet {
     }
 }
 
+// Stage 3 - Hand
+class Hand extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            handCards: this.props.handArray
+        };
+    }
+
+    // key prop added to resolve an "Each child in a list should have a unique "key" prop." error
+    render() {
+        let cards = this.state.handCards.map((card) =>
+            <Card suit={card.suit} rank={card.rank} key={this.state.handCards.indexOf(card)} />
+        );
+
+        return (
+            <div>
+                {cards}
+            </div>
+        )
+    }
+}
+
 // Stage 2 - Card
 class Card extends React.Component {
     constructor(props) {
@@ -47,7 +70,6 @@ class Card extends React.Component {
                 <div className={this.props.suit == "♥" || this.props.suit == "♦" ? "red" : ""}>{this.props.suit}</div>
             </div>
         )
-
     }
 
     toggleFace() {
@@ -58,13 +80,15 @@ class Card extends React.Component {
     }
 }
 
-// Stage 2 - Generate props for Card
+// Stage 3 - Generate props for Hand
 let cardSet = new ShuffledCardSet();
-let obj = cardSet.removeCard();
+let obj1 = cardSet.removeCard();
+let obj2 = cardSet.removeCard();
+let obj3 = cardSet.removeCard();
 
-// Stage 2 - Render Card
+// Stage 3 - Render Hand
 ReactDOM.render(
-    <Card suit={obj.suit} rank={obj.rank} red={obj.red} />,
+    <Hand handArray = {[obj1, obj2, obj3]}  />,
     document.getElementById('handArea')
 );
 
