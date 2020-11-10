@@ -56,9 +56,9 @@ class Game extends React.Component {
     render() {
         return (
             <div>
-                <div className="deckArea"><Deck onCardUpdate={this.addCard} /></div>
-                <div className="handArea"><Hand handCards={this.state.handCards} /></div>
-                <div className="pointsArea">Points: {this.state.score}</div>
+                <div id="deckArea"><Deck onCardUpdate={this.addCard} /></div>
+                <div id="handArea"><Hand handCards={this.state.handCards} /></div>
+                <div id="pointsArea">Points: {this.state.score}</div>
             </div>
         )
     }
@@ -70,7 +70,7 @@ class Hand extends React.Component {
 
     render() {
         let cards = this.props.handCards.map((card) =>
-            <Card suit={card.suit} rank={card.rank} />
+            <Card suit={card.suit} rank={card.rank} key={this.props.handCards.indexOf(card)} />
         );
 
         return (
