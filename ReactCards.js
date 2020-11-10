@@ -34,22 +34,30 @@ class ShuffledCardSet {
 class Game extends React.Component {
     constructor(props) {
         super(props);
-        // this.handleChange = this.handleChange.bind(this);
+        this.addCard = this.addCard.bind(this);
         this.state = {
             handCards: [],
             score: 0
         };
     }
 
-    // handleChange(e) {
-    //     this.setState({handCards: e.target.value});
-    // }
+    addCard() {
+        this.setState(function (oldState, props) {
+            let card = cardSet.removeCard();
+            let oldScore = this.state.score;
+            return {
+                handCards: this.state.handCards.concat(card),
+                score: "JQK".includes(card.rank) ? oldScore + 10 :
+                    card.rank === "A" ? oldScore + 11 : oldScore + Number(card.rank)
+            };
+        });
+    }
 
     render() {
         return (
             <div>
-                <div className="deckArea"><Deck handCards={this.state.handCards} /></div>
-                <div className="handArea"><Hand /></div>
+                <div className="deckArea"><Deck onCardUpdate={this.addCard} /></div>
+                <div className="handArea"><Hand handCards={this.state.handCards} /></div>
                 <div className="pointsArea">Points: {this.state.score}</div>
             </div>
         )
@@ -59,11 +67,15 @@ class Game extends React.Component {
 // Stage 5 - Simplify Hand
 // Stage 4 - Hand
 class Hand extends React.Component {
-    // key prop added to resolve an "Each child in a list should have a unique "key" prop." error
+
     render() {
+        let cards = this.props.handCards.map((card) =>
+            <Card suit={card.suit} rank={card.rank} />
+        );
+
         return (
             <div>
-                {this.props.cards}
+                {cards}
             </div>
         )
     }
@@ -81,8 +93,8 @@ class Card extends React.Component {
     render() {
         return (
             <div className={this.state.faceUp ? "card" : "card back" } onClick={() => this.toggleFace()}>
-                <div className={this.props.suit == "♥" || this.props.suit == "♦" ? "red" : ""}>{this.props.rank}</div>
-                <div className={this.props.suit == "♥" || this.props.suit == "♦" ? "red" : ""}>{this.props.suit}</div>
+                <div className={this.props.suit === "♥" || this.props.suit === "♦" ? "red" : ""}>{this.props.rank}</div>
+                <div className={this.props.suit === "♥" || this.props.suit === "♦" ? "red" : ""}>{this.props.suit}</div>
             </div>
         )
     }
@@ -98,13 +110,7 @@ class Card extends React.Component {
 // Stage 1
 class Deck extends React.Component {
     render() {
-        return <div className="deck" onClick={() => this.addCard()}></div>;
-    }
-
-    addCard() {
-        this.setState(function (oldState, props) {
-            return {handCards: this.props.handCards.concat(cardSet.removeCard())};
-        });
+        return <div className="deck" onClick={() => this.props.onCardUpdate()}></div>;
     }
 }
 
@@ -114,7 +120,5 @@ let cardSet = new ShuffledCardSet();
 
 // Stage 3, 4 - Render Hand
 // Stage 1 - Render Deck
-//ReactDOM.render(<Deck />, document.getElementById('deckArea'));
-//ReactDOM.render(<Hand />,document.getElementById('handArea'));
 ReactDOM.render(<Game />,document.getElementById('game'));
 
